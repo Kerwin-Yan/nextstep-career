@@ -1,0 +1,2186 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f3f5fa">
+<title>下一程 · 求职工作台</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%235a64d6'/%3E%3Cpath d='M7 23V17M16 23V11M25 23V5' stroke='white' stroke-width='4'/%3E%3C/svg%3E">
+<meta name="nextstep-shell" content="1">
+<meta name="nextstep-release" content="20261106-r13-v4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="下一程">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="mobile.css">
+<script defer src="storage.js">
+</script>
+<script defer src="demo.js">
+</script>
+<script defer src="app.js">
+</script>
+<script defer src="vendor/alpine.min.js">
+</script>
+<script defer src="pwa.js">
+</script>
+</head>
+<body x-data="desktopApp" :class="{'panel-open':panel}" @keydown.window="trap($event)">
+<svg class="symbol-bank" aria-hidden="true">
+<defs>
+  <symbol id="grid" viewBox="0 0 24 24">
+<rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1.4"/>
+<rect x="14" y="3.5" width="6.5" height="6.5" rx="1.4"/>
+<rect x="3.5" y="14" width="6.5" height="6.5" rx="1.4"/>
+<rect x="14" y="14" width="6.5" height="6.5" rx="1.4"/>
+</symbol>
+  <symbol id="briefcase" viewBox="0 0 24 24">
+<rect x="3" y="7" width="18" height="13" rx="2.5"/>
+<path d="M8 7V4h8v3M3 12a26 26 0 0 0 18 0M10 13h4"/>
+</symbol>
+  <symbol id="plan" viewBox="0 0 24 24">
+<path d="m3 6 2 2 3-4M11 6h10M3 13l2 2 3-4M11 13h10M4 20h4M11 20h10"/>
+</symbol>
+  <symbol id="file" viewBox="0 0 24 24">
+<path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8ZM14 3v5h5M8 12h8M8 16h6"/>
+</symbol>
+  <symbol id="chat" viewBox="0 0 24 24">
+<path d="M20 4H4v13h4v4l5-4h7ZM8 8h8M8 12h5"/>
+</symbol>
+  <symbol id="arrow" viewBox="0 0 24 24">
+<path d="M4 12h15m-5-5 5 5-5 5"/>
+</symbol>
+  <symbol id="chevron" viewBox="0 0 24 24">
+<path d="m9 5 7 7-7 7"/>
+</symbol>
+  <symbol id="plus" viewBox="0 0 24 24">
+<path d="M12 5v14M5 12h14"/>
+</symbol>
+  <symbol id="check" viewBox="0 0 24 24">
+<path d="m5 12 4 4L19 6"/>
+</symbol>
+  <symbol id="settings" viewBox="0 0 24 24">
+<path d="m9 3-1 3-3 1 1 3-2 2 2 2-1 3 3 1 1 3h6l1-3 3-1-1-3 2-2-2-2 1-3-3-1-1-3Z"/>
+<circle cx="12" cy="12" r="3"/>
+</symbol>
+  <symbol id="clock" viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="8.5"/>
+<path d="M12 7v5l3 2"/>
+</symbol>
+  <symbol id="pin" viewBox="0 0 24 24">
+<path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 0 1 14 0Z"/>
+<circle cx="12" cy="10" r="2"/>
+</symbol>
+  <symbol id="close" viewBox="0 0 24 24">
+<path d="m6 6 12 12M6 18 18 6"/>
+</symbol>
+  <symbol id="external" viewBox="0 0 24 24">
+<path d="M9 5H5v14h14v-4M13 5h6v6M19 5 9 15"/>
+</symbol>
+<symbol id="search" viewBox="0 0 24 24">
+<circle cx="10.5" cy="10.5" r="6.5"/>
+<path d="m16 16 5 5"/>
+</symbol>
+<symbol id="download" viewBox="0 0 24 24">
+<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>
+</symbol>
+<symbol id="upload" viewBox="0 0 24 24">
+<path d="M12 16V4m-5 5 5-5 5 5M4 16v5h16v-5"/>
+</symbol>
+<symbol id="calendar" viewBox="0 0 24 24">
+<rect x="3" y="5" width="18" height="16" rx="2"/>
+<path d="M7 3v5M17 3v5M3 11h18M7 15h3M14 15h3"/>
+</symbol>
+<symbol id="edit" viewBox="0 0 24 24">
+<path d="m15 4 5 5M4 20l5-1L21 7l-5-5L4 14ZM4 20h16"/>
+</symbol>
+</defs>
+</svg>
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<div class="workspace" :inert="!!panel">
+<aside class="sidebar" aria-label="工作台导航">
+<a class="brand" href="#overview" @click.prevent="go('overview')">
+<span class="brand-logo" aria-hidden="true">
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+</span>
+<span>下一程</span>
+</a>
+<button class="space-switch" @click="open('profile')">
+<span class="space-avatar" x-text="state.profile.owner.slice(0,1)||'我'">
+</span>
+<span class="space-name">
+<span :title="spaceName" x-text="spaceName">
+</span>
+<small>个人工作台</small>
+</span>
+</button>
+<nav class="navigation" aria-label="主导航">
+<template x-for="n in navs" :key="n.key">
+<a class="nav-link" :class="{selected:view===n.key}" :href="'#'+n.key" :aria-current="view===n.key?'page':null" @click.prevent="go(n.key)">
+<svg class="icon" aria-hidden="true">
+<use :href="'#'+n.icon"/>
+</svg>
+<span x-text="n.label">
+</span>
+<span class="selected-dot" x-show="view===n.key">
+</span>
+<span class="nav-count" x-show="view!==n.key && ['jobs','tasks'].includes(n.key)" x-text="n.key==='jobs'?activeJobs.length:remaining">
+</span>
+</a>
+</template>
+</nav>
+<button class="sidebar-note" @click="open('goal')">
+<span class="note-dot">
+</span>当前阶段<small x-text="['','投递准备','定向投递','面试推进','录用与交接','已入职'][stage]">
+</small>
+<span class="side-stage">
+<template x-for="n in 5" :key="n">
+<i :class="{reached:n<=stage}">
+</i>
+</template>
+</span>
+</button>
+<div class="sidebar-bottom">
+<a class="nav-link" :class="{selected:view==='settings'}" href="#settings" @click.prevent="go('settings')">
+<svg class="icon" aria-hidden="true">
+<use href="#settings"/>
+</svg>数据与设置</a>
+</div>
+</aside>
+<main class="main" id="main-content">
+<header class="page-header">
+<h1 tabindex="-1" x-ref="pageTitle">
+<span x-text="heading">
+</span>
+<span class="demo-badge" x-show="demoMode">体验</span>
+<span class="header-date" x-text="dateText">
+</span>
+</h1>
+<div class="header-actions">
+<button x-show="view==='overview'" class="quiet-link" @click="go('tasks')">查看今日计划<svg class="icon" aria-hidden="true">
+<use href="#arrow"/>
+</svg>
+</button>
+<template x-if="view==='overview'">
+<div>
+<button type="button" class="button outline" aria-label="记录进展" @click="open('progress')" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#plus"/>
+</svg>记录进展</button>
+</div>
+</template>
+<template x-if="view==='jobs'">
+<div>
+<button type="button" class="button primary" aria-label="添加岗位" @click="open('job')" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#plus"/>
+</svg>添加岗位</button>
+</div>
+</template>
+<template x-if="view==='tasks'">
+<div>
+<button type="button" class="button primary" aria-label="添加行动" @click="open('task')" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#plus"/>
+</svg>添加行动</button>
+</div>
+</template>
+<template x-if="view==='resumes'">
+<div>
+<button type="button" class="button primary" aria-label="上传简历" @click="open('resume')" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#upload"/>
+</svg>上传简历</button>
+</div>
+</template>
+<template x-if="view==='reviews'">
+<div class="row">
+<button type="button" class="button outline" aria-label="安排面试" @click="open('interview')" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#calendar"/>
+</svg>安排面试</button>
+<button type="button" class="button primary" aria-label="记录复盘" @click="open('review')" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#plus"/>
+</svg>记录复盘</button>
+</div>
+</template>
+<button class="mobile-profile" type="button" aria-label="打开个人目标与设置" x-show="view!=='settings'" @click="go('settings')">
+<span x-text="state.profile.owner.slice(0,1)||'我'">
+</span>
+</button>
+</div>
+</header>
+<div class="global-error" x-show="error" x-cloak role="alert">
+<span x-text="error">
+</span>
+<button @click="refreshRecords()">重新读取</button>
+<button aria-label="关闭错误提示" @click="error=''">
+<svg class="icon" aria-hidden="true">
+<use href="#close"/>
+</svg>
+</button>
+</div>
+<div class="loading-state surface" x-show="loading">正在读取求职记录…</div>
+<div x-show="!loading" x-cloak>
+<section x-show="view==='overview'" class="view overview-view">
+<section class="summary" aria-label="求职概览">
+<button class="task-progress" @click="showPreparation()" :aria-label="'查看全部准备任务：'+taskProgressText">
+  <span class="metric-heading">准备进度<svg class="icon metric-link" aria-hidden="true">
+<use href="#arrow"/>
+</svg>
+</span>
+  <span class="preparation-metric">
+    <span class="progress-ring" :class="{'is-empty':!state.tasks.length,'is-done':state.tasks.length && !remaining}" :role="state.tasks.length?'progressbar':'img'" :aria-label="state.tasks.length?'准备任务完成度':'尚未安排准备任务'" :aria-valuenow="state.tasks.length?percent:null" :aria-valuetext="taskProgressText" aria-valuemin="0" aria-valuemax="100">
+      <svg viewBox="0 0 88 88" aria-hidden="true">
+<circle class="ring-track" cx="44" cy="44" r="37"/>
+<circle class="ring-value" cx="44" cy="44" r="37" pathLength="100" stroke-dasharray="100 100" :stroke-dashoffset="100-percent" :style="{opacity:completed?1:0}"/>
+</svg>
+      <span class="ring-number" aria-hidden="true">
+<span x-text="state.tasks.length?percent:'—'">
+</span>
+<small x-show="state.tasks.length">%</small>
+</span>
+    </span>
+    <span class="preparation-copy">
+<span class="preparation-total" x-show="state.tasks.length">
+<strong x-text="completed">
+</strong>
+<span>/ <span x-text="state.tasks.length">
+</span>
+<span class="completion-suffix"> 项已完成</span>
+</span>
+</span>
+<span class="preparation-total empty-copy" x-show="!state.tasks.length">从第一项准备开始</span>
+<span class="preparation-caption" x-text="!state.tasks.length?'安排你的下一步':remaining?'还有 '+remaining+' 项待完成':'当前任务已全部完成'">
+</span>
+<span class="metric-action">查看行动计划<svg class="icon" aria-hidden="true">
+<use href="#arrow"/>
+</svg>
+</span>
+</span>
+  </span>
+</button>
+<section class="pipeline-overview" aria-labelledby="pipeline-heading" aria-describedby="pipeline-description">
+  <div class="pipeline-head">
+<h2 class="metric-heading" id="pipeline-heading">投递推进</h2>
+<span class="pipeline-meta">
+<span x-text="state.applications.length?'当前状态 · 含已归档':'尚无投递记录'">
+</span>
+<details class="metric-info" @click.outside="$el.removeAttribute('open')" @keydown.escape.prevent="$el.removeAttribute('open')">
+<summary aria-label="查看投递统计口径">i</summary>
+<p id="pipeline-description">按投递记录的最新状态统计。后项是前项的子集，不代表历史转化；面试单独录入时，不补算为已投递。</p>
+</details>
+</span>
+</div>
+  <div class="pipeline-stages">
+<template x-for="(s,index) in applicationStages" :key="s.key">
+<button class="pipeline-stage" @click="showApplicationStage(s.key)" :aria-label="s.label+'：'+s.count+' 个岗位，查看列表'" :title="s.detail" :style="'--stage-height:'+s.height+'%'">
+    <span class="pipeline-label">
+<span class="wide-stage-label" x-text="s.label">
+</span>
+<span class="mobile-stage-label" x-text="['已投递','有反馈','面试中'][index]">
+</span>
+<svg class="icon" aria-hidden="true">
+<use href="#arrow"/>
+</svg>
+</span>
+<span class="pipeline-value">
+<strong x-text="s.count">
+</strong>
+<small>个岗位</small>
+</span>
+    <span class="pipeline-shape" aria-hidden="true">
+<span class="pipeline-bar">
+</span>
+<svg class="pipeline-connector" viewBox="0 0 100 100" preserveAspectRatio="none" x-show="index<2">
+<polygon :points="pipelineConnector(index)"/>
+</svg>
+</span>
+  </button>
+</template>
+</div>
+  <div class="pipeline-statuses" x-show="state.applications.length" aria-label="投递最新状态分布">
+<template x-for="s in feedback" :key="s.key">
+<button class="pipeline-status" :class="{'is-zero':!s.count}" @click="showApplicationStage(s.key)" :aria-label="s.label+'：'+s.count+' 个岗位，查看列表'">
+<span x-text="s.label">
+</span>
+<strong x-text="s.count">
+</strong>
+</button>
+</template>
+</div>
+</section>
+</section>
+<button class="mobile-day-summary" @click="todayEvents.length?open('today-activity'):open('progress')">
+<span>今日进展 <b x-text="todayEvents.length?todayEvents.length+' 条':''">
+</b>
+</span>
+<span class="day-summary-title" x-text="todayEvents.length?todayEvents[0].title:'还没有记录，记一笔'">
+</span>
+<svg class="icon" aria-hidden="true">
+<use href="#chevron"/>
+</svg>
+</button>
+<div class="work-grid">
+<div class="primary-column">
+<section class="preparation surface" id="preparation">
+<div class="section-head">
+<div class="section-title">
+<h2>今日准备</h2>
+<span class="sub-count" x-text="dueRemaining+' 项待完成'">
+</span>
+</div>
+<button class="icon-button" aria-label="添加行动" @click="open('task')">
+<svg class="icon" aria-hidden="true">
+<use href="#plus"/>
+</svg>
+</button>
+</div>
+<div class="task-toolbar" x-show="dueTasks.length">
+<div class="tabs" aria-label="今日准备筛选">
+<button :class="{active:taskFilter==='pending'}" @click="taskFilter='pending'">待完成</button>
+<button :class="{active:taskFilter==='all'}" @click="taskFilter='all'">全部任务</button>
+</div>
+<span class="list-hint">含逾期 · 按优先级排列</span>
+</div>
+<div class="task-list">
+<template x-for="(t,index) in todayTasks" :key="t.id">
+<article class="task" :class="{'featured':index===0 && !t.done,'is-complete':t.done,'just-updated':focusId===t.id}">
+<button class="task-check" :aria-label="(t.done?'重新打开：':'标记完成：')+t.title" :aria-pressed="t.done" @click="toggleTask(t.id)" :disabled="saving">
+<span>
+<svg class="icon" x-show="t.done" aria-hidden="true">
+<use href="#check"/>
+</svg>
+</span>
+</button>
+<div class="task-content">
+<div class="task-meta">
+<span class="priority" :class="{'priority-first':t.priority===1}" x-text="priorityName(t.priority)">
+</span>
+<span class="meta-divider">
+</span>
+<span x-text="t.category">
+</span>
+</div>
+<h3>
+<button class="task-title-button" @click="open('task-detail',t.id)" x-text="t.title">
+</button>
+</h3>
+<p x-show="index===0 && !t.done" x-text="t.detail">
+</p>
+<span class="linked-meta" x-show="t.jobId" x-text="jobName(t.jobId)">
+</span>
+</div>
+<div class="task-trailing">
+<div class="task-deadline">
+<time class="task-date" :datetime="t.due" :aria-label="'截止日期：'+t.due">
+<span class="long-date" x-text="t.due">
+</span>
+<span class="short-date" x-text="t.due===today?'今天':t.due.slice(5).replace('-','.')">
+</span>
+</time>
+<span class="task-due-state" :class="{'overdue':!t.done && t.due<today}" x-text="t.done?'已完成':t.due<today?'已逾期':t.due===today?'今天截止':''">
+</span>
+</div>
+<button class="task-action" :class="{'main-action':index===0 && !t.done}" @click="open('task-detail',t.id)">
+<span class="wide-action-label" x-text="index===0 && !t.done?'开始整理':'查看'">
+</span>
+<span class="mobile-action-label" x-text="index===0 && !t.done?'开始':'查看'">
+</span>
+<svg class="icon" aria-hidden="true">
+<use href="#arrow"/>
+</svg>
+</button>
+</div>
+</article>
+</template>
+<div x-show="!todayTasks.length">
+<div class="empty-state">
+<span class="empty-mark">
+<svg class="icon" aria-hidden="true">
+<use href="#plan"/>
+</svg>
+</span>
+<h3>今天没有待完成的准备</h3>
+<p>可以查看后续计划，或安排一个新的行动。</p>
+<button type="button" class="button outline" aria-label="添加一个行动" @click="open('task')" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#plus"/>
+</svg>添加一个行动</button>
+</div>
+</div>
+</div>
+<footer class="section-footer">
+<span>
+<span class="completion-dot" :class="{done:completed>0}">
+</span>已完成 <b x-text="completed">
+</b> 项任务</span>
+<button class="text-button" @click="go('tasks')">查看全部计划 <svg class="icon" aria-hidden="true">
+<use href="#arrow"/>
+</svg>
+</button>
+</footer>
+</section>
+<section class="opportunities surface">
+<div class="section-head">
+<div class="section-title">
+<h2>值得推进的机会</h2>
+<span class="sub-count" x-text="activeJobs.length+' 个意向岗位'">
+</span>
+</div>
+<button class="text-button" @click="go('jobs')">全部岗位 <svg class="icon" aria-hidden="true">
+<use href="#arrow"/>
+</svg>
+</button>
+</div>
+<div class="job-table" x-show="recommendedJobs.length">
+<div class="job-table-head">
+<span>公司</span>
+<span>岗位</span>
+<span>下一步</span>
+<span>
+</span>
+</div>
+<template x-for="j in recommendedJobs" :key="j.id">
+<button class="job-row " @click="open('job-detail',j.id)">
+<span class="company" x-text="j.company">
+</span>
+<span class="job-title">
+<strong x-text="j.title">
+</strong>
+<small>
+<span x-text="j.location||'地点待确认'">
+</span>
+<span class="job-source" x-text="j.source||'手动保存'">
+</span>
+</small>
+</span>
+<span class="job-next" x-text="nextStep(j)">
+</span>
+<svg class="icon" aria-hidden="true">
+<use href="#chevron"/>
+</svg>
+</button>
+</template>
+</div>
+<div x-show="!recommendedJobs.length">
+<div class="empty-state">
+<span class="empty-mark">
+<svg class="icon" aria-hidden="true">
+<use href="#briefcase"/>
+</svg>
+</span>
+<h3>保存第一个意向岗位</h3>
+<p>从岗位职责和实际要求出发，准备更有方向。</p>
+<button type="button" class="button outline" aria-label="添加岗位" @click="open('job')" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#plus"/>
+</svg>添加岗位</button>
+</div>
+</div>
+</section>
+</div>
+<aside class="context-column">
+<section class="today surface">
+<div class="section-head">
+<h2>今日进展</h2>
+<span class="today-date" x-text="shortDate">
+</span>
+</div>
+<div class="today-empty" x-show="!todayEvents.length">
+<span class="event-marker">
+</span>
+<h3>今天暂无新增进展</h3>
+<p>完成准备、投递或沟通后，<br>把这一步记录下来。</p>
+</div>
+<div class="event-list">
+<template x-for="e in todayEvents.slice(0,2)" :key="e.id">
+<article class="event">
+<span class="event-marker">
+</span>
+<time x-text="e.date===today?(e.time||'') : e.date+' '+(e.time||'')">
+</time>
+<h3 x-text="e.title">
+</h3>
+<div class="event-management" x-show="e.kind==='note'">
+<button class="text-button" @click="open('progress',e.id)">编辑</button>
+<button class="text-button danger" @click="remove('events',e.id)">删除</button>
+</div>
+<p class="event-detail" x-show="e.detail" x-text="e.detail">
+</p>
+<button class="text-button" x-show="e.jobId" @click="open('job-detail',e.jobId)" x-text="jobName(e.jobId)">
+</button>
+</article>
+</template>
+</div>
+<div class="today-actions">
+<button class="record-progress" @click="open('progress')">
+<svg class="icon" aria-hidden="true">
+<use href="#plus"/>
+</svg>记录一次推进<svg class="icon" aria-hidden="true">
+<use href="#arrow"/>
+</svg>
+</button>
+<button x-show="state.events.length" class="text-button all-events" @click="open('activity')">全部进展</button>
+</div>
+</section>
+<section class="goal-card">
+<div class="goal-top">
+<span class="goal-eyebrow">下一里程碑</span>
+<button class="icon-button" aria-label="查看求职目标" @click="open('goal')">
+<svg class="icon" aria-hidden="true">
+<use href="#arrow"/>
+</svg>
+</button>
+</div>
+<h2 x-text="milestoneTitle">
+</h2>
+<p class="goal-description" x-text="milestoneDetail">
+</p>
+<div class="journey" :aria-label="'当前阶段：'+['','准备','投递','面试','Offer','入职'][stage]">
+<template x-for="(label,index) in ['准备','投递','面试','Offer','入职']" :key="label">
+<div class="journey-stop" :class="{'current':stage===index+1,'passed':stage>index+1}">
+<i x-text="index+1">
+</i>
+<span x-text="label">
+</span>
+</div>
+</template>
+</div>
+<div class="goal-details">
+<div>
+<span>意向地点</span>
+<strong x-text="state.profile.city||'待补充'">
+</strong>
+</div>
+<div>
+<span>理想年包</span>
+<strong x-text="salaryLabel">
+</strong>
+</div>
+</div>
+<div class="goal-deadline">
+<svg class="icon" aria-hidden="true">
+<use href="#clock"/>
+</svg>
+<span>目标 Offer<span x-text="state.profile.goalWindow||'待设定'">
+</span>
+</span>
+</div>
+</section>
+<template x-if="nextInterview">
+<section class="surface compact-surface">
+<span class="eyebrow">下一次面试</span>
+<h3 x-text="jobName(nextInterview.jobId)">
+</h3>
+<p x-text="nextInterview.date+' '+nextInterview.time+' · '+nextInterview.round">
+</p>
+<button class="text-button" @click="open('interview',nextInterview.id)">查看安排 <svg class="icon" aria-hidden="true">
+<use href="#arrow"/>
+</svg>
+</button>
+</section>
+</template>
+</aside>
+</div>
+</section>
+<section x-show="view==='jobs'" class="view">
+<p class="page-intro">把有价值的机会留下来，持续跟进到下一步。</p>
+<div class="surface list-surface">
+<div class="list-toolbar">
+<div class="segmented" aria-label="岗位范围">
+<template x-for="s in [{key:'active',label:'全部机会'},{key:'pending',label:'待推进'},{key:'submitted',label:'已投递'},{key:'archived',label:'已归档'}]">
+<button :class="{active:jobFilter===s.key || (s.key==='submitted' && isApplicationFilter)}" @click="setJobScope(s.key)" x-text="s.label">
+</button>
+</template>
+</div>
+<label class="search-field">
+<svg class="icon" aria-hidden="true">
+<use href="#search"/>
+</svg>
+<input x-model="jobQuery" aria-label="搜索岗位" placeholder="搜索公司、岗位或地点">
+<button aria-label="清空岗位搜索" x-show="jobQuery" @click="jobQuery=''">
+<svg class="icon" aria-hidden="true">
+<use href="#close"/>
+</svg>
+</button>
+</label>
+</div>
+<div class="mobile-filter-bar">
+<span x-text="filteredJobs.length+' 个岗位'">
+</span>
+<button @click="open('job-filters')">筛选 <svg class="icon" aria-hidden="true">
+<use href="#plan"/>
+</svg>
+</button>
+</div>
+<div class="filter-row job-feedback-filters">
+<span>反馈状态</span>
+<button class="filter-chip" :class="{active:!isApplicationFilter || jobFilter==='submitted'}" @click="jobFilter=isApplicationFilter?'submitted':jobFilter">不限</button>
+<button class="filter-chip" :class="{active:jobFilter==='feedback'}" @click="jobFilter='feedback'">有反馈</button>
+<template x-for="s in statuses" :key="s.key">
+<button class="filter-chip" :class="{active:jobFilter===s.key}" @click="jobFilter=s.key" x-text="s.label">
+</button>
+</template>
+<label class="archive-scope" x-show="jobFilter!=='archived'">
+<input type="checkbox" x-model="jobIncludeArchived">含已归档</label>
+<span class="result-count" x-text="filteredJobs.length+' 个岗位'">
+</span>
+</div>
+<div class="job-table large-job-table" x-show="filteredJobs.length">
+<div class="job-table-head full-job-row">
+<span>公司</span>
+<span>岗位 / 地点与薪资</span>
+<span>当前状态</span>
+<span>下一步</span>
+<span>
+</span>
+</div>
+<template x-for="j in filteredJobs" :key="j.id">
+<button class="job-row full-job-row" @click="open('job-detail',j.id)">
+<span class="company" x-text="j.company">
+</span>
+<span class="job-title">
+<strong x-text="j.title">
+</strong>
+<small>
+<span x-text="j.location||'地点待确认'">
+</span>
+<span class="job-source" x-text="j.salary||j.source||'手动保存'">
+</span>
+</small>
+</span>
+<span class="badge" :class="application(j.id)?.status" x-text="statusName(application(j.id)?.status)">
+</span>
+<span class="job-next" x-text="nextStep(j)">
+</span>
+<svg class="icon" aria-hidden="true">
+<use href="#chevron"/>
+</svg>
+</button>
+</template>
+</div>
+<div x-show="!filteredJobs.length">
+<div class="empty-state">
+<span class="empty-mark">
+<svg class="icon" aria-hidden="true">
+<use href="#briefcase"/>
+</svg>
+</span>
+<h3>这里还没有岗位</h3>
+<p>保存意向岗位，或调整筛选查看其他机会。</p>
+<button type="button" class="button outline" aria-label="添加岗位" @click="open('job')" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#plus"/>
+</svg>添加岗位</button>
+<button class="text-button" @click="jobQuery='';setJobScope('active')">清除筛选</button>
+</div>
+</div>
+</div>
+<div class="below-note">
+<svg class="icon" aria-hidden="true">
+<use href="#clock"/>
+</svg>收藏岗位与实际投递分别记录；招聘平台反馈需要手动更新。</div>
+</section>
+<section x-show="view==='tasks'" class="view">
+<p class="page-intro">把准备拆成可完成的行动，让下一步始终明确。</p>
+<div class="plan-layout">
+<div class="surface list-surface">
+<div class="list-toolbar">
+<div class="segmented">
+<template x-for="s in [{key:'pending',label:'待完成'},{key:'done',label:'已完成'},{key:'all',label:'全部行动'}]">
+<button :class="{active:taskFilter===s.key}" @click="taskFilter=s.key" x-text="s.label">
+</button>
+</template>
+</div>
+<label class="search-field">
+<svg class="icon" aria-hidden="true">
+<use href="#search"/>
+</svg>
+<input x-model="taskQuery" aria-label="搜索行动" placeholder="搜索行动或关联岗位">
+</label>
+</div>
+<div class="filter-row">
+<span>截止时间</span>
+<template x-for="s in [{key:'all',label:'不限'},{key:'overdue',label:'已逾期'},{key:'today',label:'今天'},{key:'upcoming',label:'之后'}]">
+<button class="filter-chip" :class="{active:taskPeriod===s.key}" @click="taskPeriod=s.key" x-text="s.label">
+</button>
+</template>
+<span class="result-count" x-text="filteredTasks.length+' 项行动'">
+</span>
+</div>
+<div class="task-groups">
+<template x-for="g in taskGroups" :key="g.priority">
+<section class="task-group">
+<div class="group-title">
+<span class="priority-dot" :class="'p'+g.priority">
+</span>
+<h3 x-text="g.label">
+</h3>
+<span x-text="g.tasks.length">
+</span>
+</div>
+<template x-for="(t,index) in g.tasks" :key="t.id">
+<article class="task" :class="{'featured':false,'is-complete':t.done,'just-updated':focusId===t.id}">
+<button class="task-check" :aria-label="(t.done?'重新打开：':'标记完成：')+t.title" :aria-pressed="t.done" @click="toggleTask(t.id)" :disabled="saving">
+<span>
+<svg class="icon" x-show="t.done" aria-hidden="true">
+<use href="#check"/>
+</svg>
+</span>
+</button>
+<div class="task-content">
+<div class="task-meta">
+<span class="priority" :class="{'priority-first':t.priority===1}" x-text="priorityName(t.priority)">
+</span>
+<span class="meta-divider">
+</span>
+<span x-text="t.category">
+</span>
+</div>
+<h3>
+<button class="task-title-button" @click="open('task-detail',t.id)" x-text="t.title">
+</button>
+</h3>
+<p x-show="false" x-text="t.detail">
+</p>
+<span class="linked-meta" x-show="t.jobId" x-text="jobName(t.jobId)">
+</span>
+</div>
+<div class="task-trailing">
+<div class="task-deadline">
+<time class="task-date" :datetime="t.due" :aria-label="'截止日期：'+t.due">
+<span class="long-date" x-text="t.due">
+</span>
+<span class="short-date" x-text="t.due===today?'今天':t.due.slice(5).replace('-','.')">
+</span>
+</time>
+<span class="task-due-state" :class="{'overdue':!t.done && t.due<today}" x-text="t.done?'已完成':t.due<today?'已逾期':t.due===today?'今天截止':''">
+</span>
+</div>
+<button class="task-action" :class="{'main-action':false}" @click="open('task-detail',t.id)">
+<span class="wide-action-label" x-text="false?'开始整理':'查看'">
+</span>
+<span class="mobile-action-label" x-text="false?'开始':'查看'">
+</span>
+<svg class="icon" aria-hidden="true">
+<use href="#arrow"/>
+</svg>
+</button>
+</div>
+</article>
+</template>
+</section>
+</template>
+<div x-show="!filteredTasks.length">
+<div class="empty-state">
+<span class="empty-mark">
+<svg class="icon" aria-hidden="true">
+<use href="#plan"/>
+</svg>
+</span>
+<h3>没有符合条件的行动</h3>
+<p>没有符合当前筛选的行动。可以调整筛选或安排新的准备。</p>
+<button type="button" class="button outline" aria-label="添加行动" @click="open('task')" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#plus"/>
+</svg>添加行动</button>
+</div>
+</div>
+</div>
+</div>
+<aside class="context-column">
+<section class="surface compact-surface">
+<span class="eyebrow">计划进度</span>
+<div class="plan-progress">
+<strong x-text="percent+'%'">
+</strong>
+<span x-text="completed+' / '+state.tasks.length+' 项已完成'">
+</span>
+</div>
+<div class="small-track">
+<i :style="'width:'+percent+'%'">
+</i>
+</div>
+<div class="mini-counts">
+<span>今天待办<strong x-text="state.tasks.filter(t=>!t.done && t.due===today).length">
+</strong>
+</span>
+<span>已逾期<strong x-text="state.tasks.filter(t=>!t.done && t.due<today).length">
+</strong>
+</span>
+</div>
+</section>
+<section class="goal-card">
+<div class="goal-top">
+<span class="goal-eyebrow">下一里程碑</span>
+<button class="icon-button" aria-label="查看求职目标" @click="open('goal')">
+<svg class="icon" aria-hidden="true">
+<use href="#arrow"/>
+</svg>
+</button>
+</div>
+<h2 x-text="milestoneTitle">
+</h2>
+<p class="goal-description" x-text="milestoneDetail">
+</p>
+<div class="journey" :aria-label="'当前阶段：'+['','准备','投递','面试','Offer','入职'][stage]">
+<template x-for="(label,index) in ['准备','投递','面试','Offer','入职']" :key="label">
+<div class="journey-stop" :class="{'current':stage===index+1,'passed':stage>index+1}">
+<i x-text="index+1">
+</i>
+<span x-text="label">
+</span>
+</div>
+</template>
+</div>
+<div class="goal-details">
+<div>
+<span>意向地点</span>
+<strong x-text="state.profile.city||'待补充'">
+</strong>
+</div>
+<div>
+<span>理想年包</span>
+<strong x-text="salaryLabel">
+</strong>
+</div>
+</div>
+<div class="goal-deadline">
+<svg class="icon" aria-hidden="true">
+<use href="#clock"/>
+</svg>
+<span>目标 Offer<span x-text="state.profile.goalWindow||'待设定'">
+</span>
+</span>
+</div>
+</section>
+</aside>
+</div>
+</section>
+<section x-show="view==='resumes'" class="view">
+<p class="page-intro">保留每一个简历版本，清楚知道每次投递用了哪一份。</p>
+<div class="resume-layout">
+<div class="primary-column">
+<div class="surface resume-toolbar">
+<span>
+<strong x-text="state.resumes.length">
+</strong> 个文件版本</span>
+<label class="search-field">
+<svg class="icon" aria-hidden="true">
+<use href="#search"/>
+</svg>
+<input x-model="resumeQuery" aria-label="搜索简历" placeholder="搜索简历名称、版本或备注">
+</label>
+</div>
+<template x-for="g in resumeGroups" :key="g.id">
+<section class="surface resume-group">
+<div class="section-head">
+<div class="resume-identity">
+<span class="file-icon">
+<svg class="icon" aria-hidden="true">
+<use href="#file"/>
+</svg>
+</span>
+<div>
+<h2 x-text="g.latest.label||g.latest.name">
+</h2>
+<p x-text="g.versions.length+' 个版本 · 最近保存 '+(g.latest.date||'日期未记录')">
+</p>
+</div>
+</div>
+<button type="button" class="button outline" aria-label="添加新版本" @click="open('resume','',{groupId:g.id,label:g.latest.label||g.latest.name,versionLabel:'V'+(g.versions.length+1)})" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#plus"/>
+</svg>添加新版本</button>
+</div>
+<template x-for="(r,index) in g.versions" :key="r.id">
+<article class="resume-version">
+<div class="version-heading">
+<span class="version-label" x-text="r.versionLabel||'原始版本'">
+</span>
+<span class="badge" x-show="index===0">最新保存</span>
+<time x-text="r.date">
+</time>
+</div>
+<div class="version-content">
+<div class="version-info">
+<h3 x-text="r.name">
+</h3>
+<p x-text="size(r.size)+' · '+(resumeUses(r)?resumeUses(r)+' 个岗位投递使用':'尚未关联投递')">
+</p>
+<p class="pre-line" x-show="r.note" x-text="r.note">
+</p>
+</div>
+<div class="row">
+<button type="button" class="button outline" aria-label="下载" @click="download(r)" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#download"/>
+</svg>下载</button>
+<button class="icon-button" aria-label="编辑简历信息" @click="open('resume',r.id)">
+<svg class="icon" aria-hidden="true">
+<use href="#edit"/>
+</svg>
+</button>
+</div>
+</div>
+</article>
+</template>
+</section>
+</template>
+<div class="surface" x-show="!resumeGroups.length">
+<div class="empty-state">
+<span class="empty-mark">
+<svg class="icon" aria-hidden="true">
+<use href="#file"/>
+</svg>
+</span>
+<h3>从第一份简历开始</h3>
+<p>支持 PDF、Word、TXT，每个文件不超过 10 MB。</p>
+<button type="button" class="button primary" aria-label="上传简历" @click="open('resume')" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#upload"/>
+</svg>上传简历</button>
+</div>
+</div>
+</div>
+<aside class="context-column">
+<section class="surface compact-surface">
+<span class="eyebrow">版本与投递</span>
+<h3>每次投递，有据可查</h3>
+<p>新文件保存为新版本，原版本始终保留。记录投递时选择简历，投递记录会留存当时的文件。</p>
+<div class="simple-divider">
+</div>
+<span class="eyebrow">文件保存</span>
+<p>文件保存在当前浏览器。导出备份时会一并打包，换设备后可恢复。</p>
+<button type="button" class="button outline" aria-label="导出完整备份" @click="exportBackup()" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#download"/>
+</svg>导出完整备份</button>
+</section>
+</aside>
+</div>
+</section>
+<section x-show="view==='reviews'" class="view">
+<p class="page-intro">从面试安排到回顾，把每次交流沉淀为下一次的准备。</p>
+<div class="review-layout">
+<div class="primary-column">
+<section class="surface list-surface">
+<div class="section-head">
+<div class="section-title">
+<h2>面试安排</h2>
+<span class="sub-count" x-text="state.interviews.filter(i=>i.status==='scheduled').length+' 场待跟进'">
+</span>
+</div>
+<button class="text-button" @click="open('interview')">添加安排 <svg class="icon" aria-hidden="true">
+<use href="#plus"/>
+</svg>
+</button>
+</div>
+<div class="interviews">
+<template x-for="i in interviews" :key="i.id">
+<article class="interview-row">
+<div class="date-tile">
+<strong x-text="i.date.slice(8)">
+</strong>
+<span x-text="i.date.slice(0,4)===today.slice(0,4)?i.date.slice(5,7)+'月':i.date.slice(0,7)">
+</span>
+</div>
+<div class="interview-main">
+<h3 x-text="jobName(i.jobId)">
+</h3>
+<p x-text="i.round+' · '+i.time+' · '+i.method">
+</p>
+<span class="badge" x-text="interviewStatus(i)">
+</span>
+</div>
+<div class="interview-actions">
+<button class="text-button" @click="open('interview',i.id)">查看安排</button>
+<button class="button outline" x-show="i.status!=='cancelled'" @click="reviewInterview(i)" x-text="state.reviews.some(r=>r.interviewId===i.id)?'查看复盘':i.date>today?'准备面试':'写复盘'">
+</button>
+</div>
+</article>
+</template>
+</div>
+<div x-show="!interviews.length">
+<div class="empty-state">
+<span class="empty-mark">
+<svg class="icon" aria-hidden="true">
+<use href="#calendar"/>
+</svg>
+</span>
+<h3>还没有面试安排</h3>
+<p>有了具体的时间与岗位后，在这里安排并准备。</p>
+<button type="button" class="button outline" aria-label="安排面试" @click="open('interview')" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#calendar"/>
+</svg>安排面试</button>
+</div>
+</div>
+</section>
+<section class="surface list-surface">
+<div class="section-head">
+<h2>复盘记录</h2>
+<span class="sub-count" x-text="state.reviews.length+' 篇'">
+</span>
+</div>
+<div class="list-toolbar review-toolbar">
+<label class="search-field">
+<svg class="icon" aria-hidden="true">
+<use href="#search"/>
+</svg>
+<input x-model="reviewQuery" aria-label="搜索复盘" placeholder="搜索岗位、问题或复盘内容">
+</label>
+<select x-model="reviewJob" aria-label="按岗位筛选复盘">
+<option value="">全部岗位</option>
+<template x-for="j in state.jobs" :key="j.id">
+<option :value="j.id" x-text="j.company+' · '+j.title">
+</option>
+</template>
+</select>
+</div>
+<template x-for="r in filteredReviews" :key="r.id">
+<article class="review-entry">
+<div class="review-entry-header">
+<div>
+<span class="eyebrow" x-text="(r.date||'日期未记录')+' · '+r.round">
+</span>
+<h3>
+<button @click="open('review',r.id)" x-text="jobName(r.jobId)">
+</button>
+</h3>
+</div>
+<button class="icon-button" aria-label="编辑复盘" @click="open('review',r.id)">
+<svg class="icon" aria-hidden="true">
+<use href="#edit"/>
+</svg>
+</button>
+</div>
+<p class="review-excerpt" x-text="r.reflection||r.content">
+</p>
+<div class="review-improvement" x-show="r.improvement">
+<span>下一次改进</span>
+<p x-text="r.improvement">
+</p>
+<button class="text-button" @click="improveTask(r)">转为准备任务 <svg class="icon" aria-hidden="true">
+<use href="#arrow"/>
+</svg>
+</button>
+</div>
+</article>
+</template>
+<div x-show="!filteredReviews.length">
+<div class="empty-state">
+<span class="empty-mark">
+<svg class="icon" aria-hidden="true">
+<use href="#chat"/>
+</svg>
+</span>
+<h3>记录一次有价值的复盘</h3>
+<p>记下被问到的问题、自己的回答与下一步改进。</p>
+<button type="button" class="button outline" aria-label="记录复盘" @click="open('review')" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#plus"/>
+</svg>记录复盘</button>
+</div>
+</div>
+</section>
+</div>
+<aside class="context-column">
+<section class="surface compact-surface">
+<span class="eyebrow">复盘到行动</span>
+<h3>把收获留给下一次</h3>
+<ol class="guidance-list">
+<li>
+<strong>还原问题</strong>
+<span>具体问了什么，追问在哪里。</span>
+</li>
+<li>
+<strong>回看回答</strong>
+<span>是否说清个人动作与结果依据。</span>
+</li>
+<li>
+<strong>明确改进</strong>
+<span>补充案例、信息或表达练习。</span>
+</li>
+</ol>
+</section>
+</aside>
+</div>
+</section>
+<section x-show="view==='settings'" class="view settings-view">
+<p class="page-intro" x-text="demoMode?'体验空间 · 刷新后恢复初始内容':'管理求职目标与设备数据'">
+</p>
+<div class="settings-layout">
+<div class="primary-column">
+<section class="surface settings-section">
+<div class="section-head">
+<h2>求职目标</h2>
+<button type="button" class="button outline" aria-label="编辑目标" @click="open('profile')" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#edit"/>
+</svg>编辑目标</button>
+</div>
+<dl class="settings-details">
+<div>
+<dt>称呼</dt>
+<dd x-text="state.profile.owner||'未填写'">
+</dd>
+</div>
+<div>
+<dt>意向地点</dt>
+<dd x-text="state.profile.city||'未填写'">
+</dd>
+</div>
+<div>
+<dt>理想年包</dt>
+<dd x-text="state.profile.salary||'未填写'">
+</dd>
+</div>
+<div>
+<dt>目标 Offer 时间</dt>
+<dd x-text="state.profile.goalWindow||'未填写'">
+</dd>
+</div>
+<div>
+<dt>实际入职日期</dt>
+<dd x-text="state.profile.joinedOn||'尚未记录实际入职'">
+</dd>
+</div>
+</dl>
+</section>
+<section class="surface settings-section">
+<div class="section-head">
+<h2>设备与保存</h2>
+</div>
+<p class="section-description" x-text="demoMode?'当前为独立体验空间，不会修改你的正式记录。':'当前记录保存在这台设备。转移设备前，请先导出完整备份。'">
+</p>
+<a class="text-button" :href="demoMode?'./':'?demo=1'" x-text="demoMode?'回到我的空间':'进入体验空间'">
+</a>
+</section>
+<section class="surface settings-section">
+<div class="section-head">
+<h2>备份与恢复</h2>
+</div>
+<p class="section-description">备份包含求职目标、岗位、行动、简历原件与面试记录，适合换设备或定期留存。</p>
+<div class="data-counts">
+<span>
+<strong x-text="state.jobs.length">
+</strong> 岗位</span>
+<span>
+<strong x-text="state.tasks.length">
+</strong> 行动</span>
+<span>
+<strong x-text="state.resumes.length">
+</strong> 简历</span>
+<span>
+<strong x-text="state.reviews.length">
+</strong> 复盘</span>
+</div>
+<div class="row">
+<button type="button" class="button primary" aria-label="导出完整备份" @click="exportBackup()" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#download"/>
+</svg>导出完整备份</button>
+<label class="button outline file-button">
+<svg class="icon" aria-hidden="true">
+<use href="#upload"/>
+</svg>从备份恢复<input type="file" accept=".json,application/json" @change="readImport($event)" :disabled="fileReading || saving">
+<span class="sr-only">选择 JSON 备份</span>
+</label>
+</div>
+<p class="small-note">支持原工作台的备份；恢复前会展示内容，确认后覆盖当前空间。</p>
+</section>
+<section class="surface settings-section">
+<div class="section-head">
+<h2>数据管理</h2>
+</div>
+<div class="setting-row">
+<div>
+<h3>重新读取记录</h3>
+<p>多个页面发生保存冲突时，先保留输入，再读取最新记录。</p>
+</div>
+<button type="button" class="button outline" aria-label="重新读取" @click="refreshRecords()" :disabled="saving || fileReading">重新读取</button>
+</div>
+<div class="setting-row">
+<div>
+<h3>清空当前空间</h3>
+<p>只影响当前浏览器，删除前请先导出备份。</p>
+</div>
+<button type="button" class="button danger-outline" aria-label="清空数据" @click="confirmReset()" :disabled="saving || fileReading">清空数据</button>
+</div>
+</section>
+</div>
+<aside class="context-column">
+<section class="surface compact-surface">
+<span class="eyebrow">保存方式</span>
+<h3>每台设备，独立记录</h3>
+<p>数据与简历保存在当前浏览器，不会自动上传或与另一台手机合并。</p>
+<div class="simple-divider">
+</div>
+<span class="eyebrow">招聘平台</span>
+<p>目前手动记录实际投递与反馈，尚未连接猎聘、BOSS 直聘等账号。</p>
+</section>
+</aside>
+</div>
+</section>
+</div>
+</main>
+</div>
+<nav class="mobile-nav" aria-label="底部导航" :inert="!!panel" :aria-hidden="!!panel">
+<template x-for="(n,i) in navs" :key="n.key">
+<a :href="'#'+n.key" @click.prevent="go(n.key)" :class="{active:view===n.key}" :aria-current="view===n.key?'page':null">
+<svg class="icon" aria-hidden="true">
+<use :href="'#'+n.icon"/>
+</svg>
+<span x-text="['总览','机会','计划','简历','复盘'][i]">
+</span>
+</a>
+</template>
+</nav>
+<div id="offline-indicator" hidden role="status">离线 · 已保存的内容仍可查看</div>
+<div id="update-banner" hidden role="status">
+<span id="update-message">有新版本可用</span>
+<button id="apply-update" type="button">更新</button>
+</div>
+<div class="overlay" x-cloak x-show="panel" x-transition.opacity.duration.160ms @click.self="close()">
+<section class="detail-panel" :class="{'compact-sheet':['confirm','job-filters'].includes(panel)}" role="dialog" aria-modal="true" :aria-label="panelTitle" tabindex="-1" x-ref="dialog" x-show="panel" x-transition:enter="panel-enter" x-transition:enter-start="panel-start" x-transition:enter-end="panel-end" x-transition:leave="panel-enter" x-transition:leave-end="panel-start">
+<header class="drawer-header">
+<span x-text="panelTitle">
+</span>
+<button class="icon-button" aria-label="关闭面板" @click="close()">
+<svg class="icon" aria-hidden="true">
+<use href="#close"/>
+</svg>
+</button>
+</header>
+<div class="form-error" x-show="formError" x-cloak role="alert" tabindex="-1" x-ref="formError" x-text="formError">
+</div>
+<div class="discard-warning" x-show="discard" x-cloak>
+<span>有未保存的修改，要放弃吗？</span>
+<button @click="discard=false">继续编辑</button>
+<button @click="close(true)">放弃修改</button>
+</div>
+<template x-if="panel==='welcome'">
+<form class="drawer-form" @submit.prevent="saveProfile()">
+<div class="drawer-body">
+<div class="welcome-intro">
+<span class="brand-logo">
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+</span>
+<h2>从今天，走向下一程</h2>
+<p>建立自己的求职空间，安排准备、记录投递，让每一步有迹可循。</p>
+</div>
+<label class="field">
+<span>怎么称呼你</span>
+<input id="owner" type="text" x-model="form.owner" required maxlength="80" autocomplete="nickname">
+</label>
+<details class="onboarding-goals">
+<summary>补充求职目标（选填）</summary>
+<div class="two-fields">
+<label class="field">
+<span>意向地点（选填）</span>
+<input id="city" type="text" x-model="form.city"  maxlength="120">
+</label>
+<label class="field">
+<span>理想年包（选填）</span>
+<input id="salary" type="text" x-model="form.salary"  maxlength="240">
+</label>
+</div>
+<label class="field">
+<span>目标 Offer 时间（选填）</span>
+<input id="goalWindow" type="text" x-model="form.goalWindow"  placeholder="例如：2026 年 12 月" maxlength="240">
+</label>
+</details>
+<label class="check-label">
+<input type="checkbox" x-model="form.starter">创建 3 项基础准备任务</label>
+<p class="small-note">当前数据保存在这台设备。已有记录可在“数据与设置”恢复备份。</p>
+<a class="demo-link" href="?demo=1">先体验一下 <span aria-hidden="true">→</span>
+</a>
+</div>
+<div class="drawer-footer">
+<span class="footer-spacer">
+</span>
+<button type="button" class="button outline" @click="close()">取消</button>
+<button type="submit" class="button primary" :disabled="saving || fileReading">
+<span x-text="saving?'正在保存…':'建立求职空间'">
+</span>
+</button>
+</div>
+</form>
+</template>
+<template x-if="panel==='profile'">
+<form class="drawer-form" @submit.prevent="saveProfile()">
+<div class="drawer-body">
+<label class="field">
+<span>称呼</span>
+<input id="owner" type="text" x-model="form.owner" required maxlength="80">
+</label>
+<label class="field">
+<span>意向地点</span>
+<input id="city" type="text" x-model="form.city"  maxlength="120">
+</label>
+<label class="field">
+<span>理想年包</span>
+<input id="salary" type="text" x-model="form.salary"  maxlength="240">
+</label>
+<label class="field">
+<span>目标 Offer 时间</span>
+<input id="goalWindow" type="text" x-model="form.goalWindow"  maxlength="240">
+</label>
+<div class="simple-divider">
+</div>
+<label class="field">
+<span>实际入职日期（选填）</span>
+<input id="joinedOn" type="date" x-model="form.joinedOn"  :max="today">
+<small>实际完成入职后再填写；收到 Offer 不代表已经入职。</small>
+</label>
+</div>
+<div class="drawer-footer">
+<span class="footer-spacer">
+</span>
+<button type="button" class="button outline" @click="close()">取消</button>
+<button type="submit" class="button primary" :disabled="saving || fileReading">
+<span x-text="saving?'正在保存…':'保存目标'">
+</span>
+</button>
+</div>
+</form>
+</template>
+<template x-if="panel==='task'">
+<form class="drawer-form" @submit.prevent="saveTask()">
+<div class="drawer-body">
+<label class="field">
+<span>行动标题</span>
+<input id="title" type="text" x-model="form.title" required maxlength="500">
+</label>
+<div class="two-fields">
+<label class="field">
+<span>优先级</span>
+<select x-model="form.priority">
+<option value=1>最先完成</option>
+<option value=2>优先</option>
+<option value=3>常规</option>
+</select>
+</label>
+<label class="field">
+<span>截止日期</span>
+<input id="due" type="date" x-model="form.due" required >
+</label>
+</div>
+<div class="two-fields">
+<label class="field">
+<span>分类</span>
+<input id="category" type="text" x-model="form.category"  maxlength=100>
+</label>
+<label class="field">
+<span>关联岗位（选填）</span>
+<select x-model="form.jobId">
+<option value="">不关联岗位</option>
+<template x-for="j in state.jobs" :key="j.id">
+<option :value="j.id" x-text="j.company+' · '+j.title">
+</option>
+</template>
+</select>
+</label>
+</div>
+<label class="field">
+<span>补充说明（选填）</span>
+<textarea x-model="form.detail" rows="3" >
+</textarea>
+</label>
+<label class="field">
+<span>子步骤（选填，每行一项）</span>
+<textarea x-model="form.stepsText" rows="4" >
+</textarea>
+</label>
+</div>
+<div class="drawer-footer">
+<button type="button" class="text-button danger" x-show="form.id" @click="remove('tasks',form.id)">删除行动</button>
+<span class="footer-spacer">
+</span>
+<button type="button" class="button outline" @click="close()">取消</button>
+<button type="submit" class="button primary" :disabled="saving || fileReading">
+<span x-text="saving?'正在保存…':'保存行动'">
+</span>
+</button>
+</div>
+</form>
+</template>
+<template x-if="panel==='task-detail' && selectedTask">
+<div class="drawer-form">
+<div class="drawer-body">
+<span class="drawer-kicker" x-text="priorityName(selectedTask.priority)+' · '+selectedTask.category">
+</span>
+<h2 x-text="selectedTask.title">
+</h2>
+<p class="pre-line" x-text="selectedTask.detail||'暂无补充说明'">
+</p>
+<dl class="detail-dl">
+<dt>截止日期</dt>
+<dd x-text="selectedTask.due">
+</dd>
+<dt>关联岗位</dt>
+<dd>
+<button class="text-button" x-show="selectedTask.jobId" @click="open('job-detail',selectedTask.jobId)" x-text="jobName(selectedTask.jobId)">
+</button>
+<span x-show="!selectedTask.jobId">未关联岗位</span>
+</dd>
+</dl>
+<button class="button outline task-material-link" x-show="selectedTask.category==='我的简历'||selectedTask.kind==='resume'" @click="close(true);go('resumes')">打开我的简历</button>
+<div class="checklist">
+<template x-for="(step,index) in (selectedTask.steps||[])" :key="index">
+<label>
+<input type="checkbox" :checked="step.done" @change="toggleStep(index)" :disabled="saving">
+<span x-text="step.title">
+</span>
+</label>
+</template>
+</div>
+</div>
+<div class="drawer-footer">
+<button class="button outline" @click="open('task',selectedTask.id)">编辑行动</button>
+<span class="footer-spacer">
+</span>
+<button class="button primary" @click="toggleTask(selectedTask.id)" :disabled="saving" x-text="selectedTask.done?'恢复为待办':'标记完成'">
+</button>
+</div>
+</div>
+</template>
+<template x-if="panel==='job'">
+<form class="drawer-form" @submit.prevent="saveJob()">
+<div class="drawer-body">
+<div class="two-fields">
+<label class="field">
+<span>公司</span>
+<input id="company" type="text" x-model="form.company" required maxlength=200>
+</label>
+<label class="field">
+<span>岗位</span>
+<input id="title" type="text" x-model="form.title" required maxlength=200>
+</label>
+</div>
+<div class="two-fields">
+<label class="field">
+<span>工作地点（选填）</span>
+<input id="location" type="text" x-model="form.location"  maxlength=500>
+</label>
+<label class="field">
+<span>薪资（选填）</span>
+<input id="salary" type="text" x-model="form.salary"  maxlength=500>
+</label>
+</div>
+<div class="two-fields">
+<label class="field">
+<span>来源（选填）</span>
+<input id="source" type="text" x-model="form.source"  maxlength=1000>
+</label>
+<label class="field">
+<span>最后核验日期（选填）</span>
+<input id="verifiedOn" type="date" x-model="form.verifiedOn"  >
+</label>
+</div>
+<label class="field">
+<span>来源链接（选填）</span>
+<input id="url" type="url" x-model="form.url"  placeholder="https://…" maxlength="2000">
+</label>
+<label class="field">
+<span>联系人 / 渠道（选填）</span>
+<input id="contact" type="text" x-model="form.contact"  maxlength="1000">
+</label>
+<label class="field">
+<span>岗位说明 / 任职要求（选填）</span>
+<textarea x-model="form.jd" rows="5" maxlength="30000">
+</textarea>
+</label>
+<label class="field">
+<span>匹配判断 / 待确认事项（选填）</span>
+<textarea x-model="form.assessment" rows="3" >
+</textarea>
+</label>
+<label class="field">
+<span>下一步（选填）</span>
+<input id="next" type="text" x-model="form.next"  maxlength="500">
+</label>
+</div>
+<div class="drawer-footer">
+<span class="footer-spacer">
+</span>
+<button type="button" class="button outline" @click="close()">取消</button>
+<button type="submit" class="button primary" :disabled="saving || fileReading">
+<span x-text="saving?'正在保存…':'保存岗位'">
+</span>
+</button>
+</div>
+</form>
+</template>
+<template x-if="panel==='job-detail' && selectedJob">
+<div class="drawer-form">
+<div class="drawer-body job-detail-body">
+<div class="job-detail-identity">
+<span class="drawer-kicker" x-text="selectedJob.company">
+</span>
+<h2 x-text="selectedJob.title">
+</h2>
+<p x-text="(selectedJob.location||'地点待确认')+(selectedJob.salary?' · '+selectedJob.salary:'')">
+</p>
+<span class="badge" :class="activeApp?.status" x-text="selectedJob.archived?'已归档':statusName(activeApp?.status)">
+</span>
+</div>
+<div class="row job-quick-actions">
+<button type="button" class="button primary" @click="open('application',selectedJob.id)" :disabled="saving || fileReading">
+<span x-text="activeApp?'更新反馈':'记录投递'">
+</span>
+</button>
+<button type="button" class="button outline" aria-label="编辑岗位" @click="open('job',selectedJob.id)" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#edit"/>
+</svg>编辑岗位</button>
+</div>
+<div class="tabs detail-tabs">
+<template x-for="tab in [{key:'overview',label:'岗位信息'},{key:'related',label:'准备与面试'},{key:'history',label:'推进记录'}]">
+<button :class="{active:detailTab===tab.key}" @click="detailTab=tab.key" x-text="tab.label">
+</button>
+</template>
+</div>
+<div x-show="detailTab==='overview'">
+<dl class="detail-dl">
+<dt>下一步</dt>
+<dd x-text="nextStep(selectedJob)">
+</dd>
+<dt>岗位来源</dt>
+<dd>
+<span x-text="selectedJob.source||'未填写'">
+</span>
+<a x-show="safeURL(selectedJob.url)" class="text-button" :href="safeURL(selectedJob.url)" target="_blank" rel="noopener noreferrer">查看原始页面 <svg class="icon" aria-hidden="true">
+<use href="#external"/>
+</svg>
+</a>
+</dd>
+<dt>最后核验</dt>
+<dd x-text="selectedJob.verifiedOn||'尚未记录核验日期'">
+</dd>
+<dt>联系人 / 渠道</dt>
+<dd x-text="selectedJob.contact||'未填写'">
+</dd>
+<dt>匹配判断与待确认</dt>
+<dd class="pre-line" x-text="selectedJob.assessment||'尚未补充判断'">
+</dd>
+<dt>岗位说明</dt>
+<dd class="pre-line" x-text="selectedJob.jd||'尚未补充岗位说明'">
+</dd>
+</dl>
+<div class="drawer-manage">
+<button type="button" class="button outline" @click="archiveJob()" :disabled="saving || fileReading">
+<span x-text="selectedJob.archived?'恢复岗位':'归档岗位'">
+</span>
+</button>
+<button class="text-button danger" @click="confirmDeleteJob()">永久删除</button>
+</div>
+</div>
+<div x-show="detailTab==='related'">
+<section class="related-section">
+<div class="section-head">
+<h3>关联行动</h3>
+<button class="text-button" @click="open('task','',{jobId:selectedJob.id})">添加行动 <svg class="icon" aria-hidden="true">
+<use href="#plus"/>
+</svg>
+</button>
+</div>
+<template x-for="t in jobTasks" :key="t.id">
+<button class="related-row" @click="open('task-detail',t.id)">
+<span x-text="t.title">
+</span>
+<small x-text="t.done?'已完成':t.due">
+</small>
+<svg class="icon" aria-hidden="true">
+<use href="#chevron"/>
+</svg>
+</button>
+</template>
+<p class="small-note" x-show="!jobTasks.length">还没有关联准备任务</p>
+</section>
+<section class="related-section">
+<div class="section-head">
+<h3>面试安排</h3>
+<button class="text-button" @click="open('interview','',{jobId:selectedJob.id})">安排面试 <svg class="icon" aria-hidden="true">
+<use href="#plus"/>
+</svg>
+</button>
+</div>
+<template x-for="i in jobInterviews" :key="i.id">
+<button class="related-row" @click="open('interview',i.id)">
+<span>
+<b x-text="i.round">
+</b>
+<small x-text="i.date+' '+i.time">
+</small>
+</span>
+<small x-text="interviewStatus(i)">
+</small>
+</button>
+</template>
+<p class="small-note" x-show="!jobInterviews.length">还没有面试安排</p>
+</section>
+<section class="related-section">
+<div class="section-head">
+<h3>面试复盘</h3>
+<button class="text-button" @click="open('review','',{jobId:selectedJob.id})">记录复盘 <svg class="icon" aria-hidden="true">
+<use href="#plus"/>
+</svg>
+</button>
+</div>
+<template x-for="r in jobReviews" :key="r.id">
+<button class="related-row" @click="open('review',r.id)">
+<span x-text="r.round+' · '+r.date">
+</span>
+<svg class="icon" aria-hidden="true">
+<use href="#chevron"/>
+</svg>
+</button>
+</template>
+<p class="small-note" x-show="!jobReviews.length">还没有面试复盘</p>
+</section>
+</div>
+<div x-show="detailTab==='history'">
+<template x-if="activeApp">
+<section class="application-snapshot">
+<span class="eyebrow">投递记录</span>
+<dl class="detail-dl">
+<dt>实际投递</dt>
+<dd x-text="activeApp.date">
+</dd>
+<dt>最新反馈</dt>
+<dd x-text="statusName(activeApp.status)+' · '+activeApp.updated">
+</dd>
+<dt>反馈说明</dt>
+<dd class="pre-line" x-text="activeApp.note||'未填写'">
+</dd>
+</dl>
+<template x-if="activeApp.resumeSnapshot">
+<div class="saved-material">
+<span>当次投递简历</span>
+<strong x-text="(activeApp.resumeSnapshot.label||activeApp.resumeSnapshot.name)+' · '+(activeApp.resumeSnapshot.versionLabel||'原始版本')">
+</strong>
+<button class="text-button" @click="download(activeApp.resumeSnapshot)">下载当时的文件 <svg class="icon" aria-hidden="true">
+<use href="#download"/>
+</svg>
+</button>
+</div>
+</template>
+<template x-for="(r,index) in (activeApp.resumeHistory||[])" :key="index">
+<div class="saved-material old-material">
+<span x-text="'之前留存 · '+r.recordedOn">
+</span>
+<strong x-text="r.name">
+</strong>
+<button class="text-button" @click="download(r)">下载文件</button>
+</div>
+</template>
+</section>
+</template>
+<div class="history-events">
+<template x-for="e in jobEvents" :key="e.id">
+<article class="event">
+<span class="event-marker">
+</span>
+<time x-text="e.date===today?(e.time||'') : e.date+' '+(e.time||'')">
+</time>
+<h3 x-text="e.title">
+</h3>
+<div class="event-management" x-show="e.kind==='note'">
+<button class="text-button" @click="open('progress',e.id)">编辑</button>
+<button class="text-button danger" @click="remove('events',e.id)">删除</button>
+</div>
+<p class="event-detail" x-show="e.detail" x-text="e.detail">
+</p>
+<button class="text-button" x-show="e.jobId" @click="open('job-detail',e.jobId)" x-text="jobName(e.jobId)">
+</button>
+</article>
+</template>
+</div>
+</div>
+</div>
+<div class="drawer-footer">
+<button class="text-button" @click="open('progress','',{jobId:selectedJob.id})">记录沟通进展</button>
+<span class="footer-spacer">
+</span>
+<button class="button outline" @click="close()">关闭</button>
+</div>
+</div>
+</template>
+<template x-if="panel==='application'">
+<form class="drawer-form" @submit.prevent="saveApplication()">
+<div class="drawer-body">
+<p class="panel-context" x-text="jobName(form.jobId)">
+</p>
+<p class="small-note">只记录已经实际发生的投递与反馈。收藏岗位不计入投递。</p>
+<label class="field">
+<span>最新状态</span>
+<select x-model="form.status">
+<template x-for="s in statuses" :key="s.key">
+<option :value="s.key" x-text="s.label">
+</option>
+</template>
+</select>
+</label>
+<div class="two-fields">
+<label class="field">
+<span>实际投递日期</span>
+<input id="date" type="date" x-model="form.date" required :max="today">
+</label>
+<label class="field">
+<span>反馈更新日期</span>
+<input id="updated" type="date" x-model="form.updated" required :max="today">
+</label>
+</div>
+<label class="field">
+<span>所用简历（选填）</span>
+<select x-model="form.resumeId">
+<option value="">暂不关联简历</option>
+<template x-for="r in state.resumes" :key="r.id">
+<option :value="r.id" x-text="(r.label||r.name)+' · '+(r.versionLabel||'原始版本')">
+</option>
+</template>
+<template x-if="form.resumeId && !state.resumes.some(r=>r.id===form.resumeId)">
+<option :value="form.resumeId">已删除的原版本（快照保留）</option>
+</template>
+</select>
+</label>
+<p class="small-note">保存投递时留存文件快照；更换版本会保留原有文件记录。</p>
+<label class="field">
+<span>反馈说明 / 下一步（选填）</span>
+<textarea x-model="form.note" rows="4" >
+</textarea>
+</label>
+</div>
+<div class="drawer-footer">
+<button type="button" class="text-button danger" x-show="form.id" @click="remove('applications',form.id)">删除记录</button>
+<span class="footer-spacer">
+</span>
+<button type="button" class="button outline" @click="close()">取消</button>
+<button type="submit" class="button primary" :disabled="saving || fileReading">
+<span x-text="saving?'正在保存…':'保存记录'">
+</span>
+</button>
+</div>
+</form>
+</template>
+<template x-if="panel==='interview'">
+<form class="drawer-form" @submit.prevent="saveInterview()">
+<div class="drawer-body">
+<label class="field">
+<span>关联岗位</span>
+<select x-model="form.jobId">
+<option value="">选择关联岗位</option>
+<template x-for="j in state.jobs" :key="j.id">
+<option :value="j.id" x-text="j.company+' · '+j.title">
+</option>
+</template>
+</select>
+</label>
+<label class="field">
+<span>面试轮次</span>
+<input id="round" type="text" x-model="form.round" required maxlength="100">
+</label>
+<div class="two-fields">
+<label class="field">
+<span>面试日期</span>
+<input id="date" type="date" x-model="form.date" required >
+</label>
+<label class="field">
+<span>时间（北京时间）</span>
+<input id="time" type="time" x-model="form.time" required >
+</label>
+</div>
+<label class="field">
+<span>面试方式 / 地址</span>
+<input id="method" type="text" x-model="form.method"  maxlength="500">
+</label>
+<label class="field">
+<span>安排状态</span>
+<select x-model="form.status">
+<option value="scheduled">已安排 / 待跟进</option>
+<option value="completed">已结束</option>
+<option value="cancelled">已取消</option>
+</select>
+</label>
+<label class="field">
+<span>准备重点 / 联系信息（选填）</span>
+<textarea x-model="form.note" rows="4" >
+</textarea>
+</label>
+<p class="small-note">面试安排单独保存；如需补记投递，请在岗位详情中记录。</p>
+</div>
+<div class="drawer-footer">
+<button type="button" x-show="form.id" class="text-button danger" @click="remove('interviews',form.id)">删除安排</button>
+<span class="footer-spacer">
+</span>
+<button type="button" class="button outline" @click="close()">取消</button>
+<button type="submit" class="button primary" :disabled="saving || fileReading">
+<span x-text="saving?'正在保存…':'保存安排'">
+</span>
+</button>
+</div>
+</form>
+</template>
+<template x-if="panel==='review'">
+<form class="drawer-form" @submit.prevent="saveReview()">
+<div class="drawer-body">
+<label class="field">
+<span>关联岗位</span>
+<select x-model="form.jobId">
+<option value="">选择关联岗位</option>
+<template x-for="j in state.jobs" :key="j.id">
+<option :value="j.id" x-text="j.company+' · '+j.title">
+</option>
+</template>
+</select>
+</label>
+<div class="two-fields">
+<label class="field">
+<span>面试轮次</span>
+<input id="round" type="text" x-model="form.round" required maxlength=100>
+</label>
+<label class="field">
+<span>复盘日期</span>
+<input id="date" type="date" x-model="form.date" required :max="today">
+</label>
+</div>
+<label class="field">
+<span>被问到的问题</span>
+<textarea x-model="form.questions" rows="4" >
+</textarea>
+</label>
+<label class="field">
+<span>我的回答 / 关键追问</span>
+<textarea x-model="form.answers" rows="4" >
+</textarea>
+</label>
+<label class="field">
+<span>复盘结论</span>
+<textarea x-model="form.reflection" rows="4" >
+</textarea>
+</label>
+<label class="field">
+<span>下一次改进</span>
+<textarea x-model="form.improvement" rows="3" >
+</textarea>
+</label>
+<template x-if="form.content && !form.questions && !form.reflection">
+<div>
+<label class="field">
+<span>原有复盘内容</span>
+<textarea x-model="form.content" rows="5" >
+</textarea>
+</label>
+</div>
+</template>
+</div>
+<div class="drawer-footer">
+<button type="button" x-show="form.id" class="text-button danger" @click="remove('reviews',form.id)">删除复盘</button>
+<span class="footer-spacer">
+</span>
+<button type="button" class="button outline" @click="close()">取消</button>
+<button type="submit" class="button primary" :disabled="saving || fileReading">
+<span x-text="saving?'正在保存…':'保存复盘'">
+</span>
+</button>
+</div>
+</form>
+</template>
+<template x-if="panel==='resume'">
+<form class="drawer-form" @submit.prevent="saveResume()">
+<div class="drawer-body">
+<template x-if="!form.id">
+<div>
+<label class="upload-zone">
+<svg class="icon" aria-hidden="true">
+<use href="#upload"/>
+</svg>
+<strong x-text="file?file.name:'选择简历文件'">
+</strong>
+<span x-text="file?size(file.size):'PDF、Word 或 TXT · 最大 10 MB'">
+</span>
+<input type="file" accept=".pdf,.doc,.docx,.txt" @change="readResume($event)" :disabled="fileReading || saving">
+</label>
+<p class="small-note" x-show="fileReading">正在读取文件…</p>
+</div>
+</template>
+<template x-if="form.id">
+<div class="file-summary">
+<svg class="icon" aria-hidden="true">
+<use href="#file"/>
+</svg>
+<span x-text="form.name">
+</span>
+</div>
+</template>
+<label class="field">
+<span>简历名称</span>
+<input id="label" type="text" x-model="form.label" required maxlength="200">
+</label>
+<label class="field">
+<span>版本标记</span>
+<input id="versionLabel" type="text" x-model="form.versionLabel" required placeholder="例如：V2 · 研发运营方向" maxlength="100">
+</label>
+<label class="field">
+<span>适用方向 / 修改说明（选填）</span>
+<textarea x-model="form.note" rows="4" >
+</textarea>
+</label>
+<p class="small-note" x-show="form.id">此处只改版本信息；替换文件请添加新版本。历史投递快照不受影响。</p>
+</div>
+<div class="drawer-footer">
+<button type="button" x-show="form.id" class="text-button danger" @click="remove('resumes',form.id)">删除文件</button>
+<span class="footer-spacer">
+</span>
+<button type="button" class="button outline" @click="close()">取消</button>
+<button type="submit" class="button primary" :disabled="saving || fileReading">
+<span x-text="saving?'正在保存…':'保存简历'">
+</span>
+</button>
+</div>
+</form>
+</template>
+<template x-if="panel==='progress'">
+<form class="drawer-form" @submit.prevent="saveProgress()">
+<div class="drawer-body">
+<label class="field">
+<span>进展标题</span>
+<input id="title" type="text" x-model="form.title" required maxlength="500">
+</label>
+<div class="two-fields">
+<label class="field">
+<span>发生日期</span>
+<input id="date" type="date" x-model="form.date" required :max="today">
+</label>
+<label class="field">
+<span>关联岗位（选填）</span>
+<select x-model="form.jobId">
+<option value="">不关联岗位</option>
+<template x-for="j in state.jobs" :key="j.id">
+<option :value="j.id" x-text="j.company+' · '+j.title">
+</option>
+</template>
+</select>
+</label>
+</div>
+<label class="field">
+<span>补充说明（选填）</span>
+<textarea x-model="form.detail" rows="6" >
+</textarea>
+</label>
+<p class="small-note">投递和反馈请在岗位详情记录，以更新统计。这里保留沟通与准备的过程。</p>
+</div>
+<div class="drawer-footer">
+<span class="footer-spacer">
+</span>
+<button type="button" class="button outline" @click="close()">取消</button>
+<button type="submit" class="button primary" :disabled="saving || fileReading">
+<span x-text="saving?'正在保存…':'保存进展'">
+</span>
+</button>
+</div>
+</form>
+</template>
+<template x-if="panel==='activity'">
+<div class="drawer-form">
+<div class="drawer-body">
+<label class="search-field">
+<svg class="icon" aria-hidden="true">
+<use href="#search"/>
+</svg>
+<input x-model="activityQuery" aria-label="搜索进展" placeholder="搜索进展记录">
+</label>
+<div class="history-events">
+<template x-for="e in filteredEvents" :key="e.id">
+<article class="event">
+<span class="event-marker">
+</span>
+<time x-text="e.date===today?(e.time||'') : e.date+' '+(e.time||'')">
+</time>
+<h3 x-text="e.title">
+</h3>
+<div class="event-management" x-show="e.kind==='note'">
+<button class="text-button" @click="open('progress',e.id)">编辑</button>
+<button class="text-button danger" @click="remove('events',e.id)">删除</button>
+</div>
+<p class="event-detail" x-show="e.detail" x-text="e.detail">
+</p>
+<button class="text-button" x-show="e.jobId" @click="open('job-detail',e.jobId)" x-text="jobName(e.jobId)">
+</button>
+</article>
+</template>
+</div>
+<p x-show="!filteredEvents.length" class="small-note">没有符合条件的进展记录</p>
+</div>
+</div>
+</template>
+<template x-if="panel==='goal'">
+<div class="drawer-form">
+<div class="drawer-body">
+<h2 x-text="milestoneTitle">
+</h2>
+<p x-text="milestoneDetail">
+</p>
+<ol class="milestone-list">
+<template x-for="(s,index) in [{title:'投递准备',detail:'核对简历与案例，明确求职目标'},{title:'定向投递',detail:'实际提交简历，跟进岗位反馈'},{title:'面试推进',detail:'安排面试，复盘并补充准备'},{title:'收到 Offer',detail:'核对书面条件、到岗与交接安排'},{title:'实际入职',detail:'完成离职交接并实际到岗'}]" :key="index">
+<li :class="{current:stage===index+1}">
+<i x-text="index+1">
+</i>
+<div>
+<h3 x-text="s.title">
+</h3>
+<p x-text="s.detail">
+</p>
+</div>
+</li>
+</template>
+</ol>
+<p class="small-note">阶段按明确记录展示，实际入职须在目标信息中填写日期。</p>
+</div>
+<div class="drawer-footer">
+<span class="footer-spacer">
+</span>
+<button type="button" class="button primary" aria-label="编辑求职目标" @click="open('profile')" :disabled="saving || fileReading">编辑求职目标</button>
+</div>
+</div>
+</template>
+<template x-if="panel==='import' && importData">
+<div class="drawer-form">
+<div class="drawer-body">
+<h2>确认恢复这份备份</h2>
+<p x-text="importFileName">
+</p>
+<dl class="settings-details">
+<div>
+<dt>所属空间</dt>
+<dd x-text="importData.profile.owner||'未命名'">
+</dd>
+</div>
+<div>
+<dt>岗位 / 行动</dt>
+<dd x-text="importData.jobs.length+' / '+importData.tasks.length">
+</dd>
+</div>
+<div>
+<dt>简历 / 面试 / 复盘</dt>
+<dd x-text="importData.resumes.length+' / '+importData.interviews.length+' / '+importData.reviews.length">
+</dd>
+</div>
+</dl>
+<div class="inline-warning">恢复会替换当前浏览器的全部记录。建议先导出当前备份。</div>
+<button class="text-button" @click="exportBackup()">先导出当前备份</button>
+<label class="check-label">
+<input type="checkbox" x-model="importConfirmed">我确认用这份备份替换当前记录</label>
+</div>
+<div class="drawer-footer">
+<button class="button outline" @click="close()">取消</button>
+<span class="footer-spacer">
+</span>
+<button class="button primary" :disabled="!importConfirmed || saving" @click="restore()">确认恢复</button>
+</div>
+</div>
+</template>
+<template x-if="panel==='confirm' && confirmation">
+<div class="drawer-form">
+<div class="drawer-body">
+<h2 x-text="confirmation.title">
+</h2>
+<p x-text="confirmation.description">
+</p>
+<label class="check-label">
+<input type="checkbox" x-model="confirmChecked">我了解此操作不可撤销</label>
+</div>
+<div class="drawer-footer">
+<button class="button outline" @click="close()">取消</button>
+<span class="footer-spacer">
+</span>
+<button class="button danger-fill" :disabled="!confirmChecked || saving" @click="confirmAction()">确认删除</button>
+</div>
+</div>
+</template>
+<template x-if="panel==='job-filters'">
+<div class="drawer-form">
+<div class="drawer-body">
+<h3 class="filter-sheet-label">反馈状态</h3>
+<div class="filter-sheet-options">
+<button :class="{selected:!isApplicationFilter||jobFilter==='submitted'}" :aria-pressed="!isApplicationFilter||jobFilter==='submitted'" @click="jobFilter=isApplicationFilter?'submitted':jobFilter">不限</button>
+<button :class="{selected:jobFilter==='feedback'}" :aria-pressed="jobFilter==='feedback'" @click="jobFilter='feedback'">有反馈</button>
+<template x-for="s in statuses" :key="s.key">
+<button :class="{selected:jobFilter===s.key}" :aria-pressed="jobFilter===s.key" @click="jobFilter=s.key" x-text="s.label">
+</button>
+</template>
+</div>
+<label class="check-label">
+<input type="checkbox" x-model="jobIncludeArchived">包含已归档岗位</label>
+</div>
+<div class="drawer-footer">
+<button class="button outline" @click="setJobScope('active')">重置</button>
+<span class="footer-spacer">
+</span>
+<button class="button primary" @click="close()" x-text="'查看 '+filteredJobs.length+' 个岗位'">
+</button>
+</div>
+</div>
+</template>
+<template x-if="panel==='today-activity'">
+<div class="drawer-form">
+<div class="drawer-body">
+<template x-for="e in todayEvents" :key="e.id">
+<article class="event">
+<span class="event-marker">
+</span>
+<time x-text="e.date===today?(e.time||'') : e.date+' '+(e.time||'')">
+</time>
+<h3 x-text="e.title">
+</h3>
+<div class="event-management" x-show="e.kind==='note'">
+<button class="text-button" @click="open('progress',e.id)">编辑</button>
+<button class="text-button danger" @click="remove('events',e.id)">删除</button>
+</div>
+<p class="event-detail" x-show="e.detail" x-text="e.detail">
+</p>
+<button class="text-button" x-show="e.jobId" @click="open('job-detail',e.jobId)" x-text="jobName(e.jobId)">
+</button>
+</article>
+</template>
+</div>
+<div class="drawer-footer">
+<span class="footer-spacer">
+</span>
+<button type="button" class="button primary" aria-label="记录进展" @click="open('progress')" :disabled="saving || fileReading">
+<svg class="icon" aria-hidden="true">
+<use href="#plus"/>
+</svg>记录进展</button>
+</div>
+</div>
+</template>
+</section>
+</div>
+<div class="toast" x-show="message" x-cloak role="status" @mouseenter="clearTimeout(messageTimer)" @mouseleave="messageTimer=setTimeout(()=>{message='';undo=null},5000)">
+<span x-text="message">
+</span>
+<button x-show="undo" @click="undoAction()" :disabled="saving">撤销</button>
+<button class="icon-button" aria-label="关闭提示" @click="message='';undo=null">
+<svg class="icon" aria-hidden="true">
+<use href="#close"/>
+</svg>
+</button>
+</div>
+<noscript>请启用 JavaScript 来使用求职工作台。</noscript>
+</body>
+</html>
