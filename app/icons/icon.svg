@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <title>下一程</title>
+  <rect width="512" height="512" fill="#5D6BD1"/>
+  <g fill="none" stroke="#FFF" stroke-width="30" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M154 342H222V274H290V206H354"/>
+    <path d="M320 172L354 206L320 240"/>
+  </g>
+</svg>
