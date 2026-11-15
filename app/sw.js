@@ -1,7 +1,7 @@
 /* Keep this version in sync with the static release. Updates wait for user action. */
 'use strict';
 
-const RELEASE = '20261115-sync-r21-v1';
+const RELEASE = '20261115-sync-r21-v2';
 const APP_SCOPE = new URL(self.registration.scope);
 const CACHE_PREFIX = `nextstep-cloud-${encodeURIComponent(APP_SCOPE.pathname)}-`;
 const CACHE_NAME = `${CACHE_PREFIX}${RELEASE}`;
@@ -9,15 +9,15 @@ const INDEX_URL = new URL('./index.html', APP_SCOPE).href;
 const SHELL_FILES = [
   './index.html',
   './cloud-config.js',
-  './cloud-bootstrap.js?v=20261115-sync-r21-v1',
-  './cloud.css?v=20261115-sync-r21-v1',
-  './styles.css?v=20261115-sync-r21-v1',
-  './mobile.css?v=20261115-sync-r21-v1',
-  './storage.js?v=20261115-sync-r21-v1',
-  './app.js?v=20261115-sync-r21-v1',
-  './pwa.js?v=20261115-sync-r21-v1',
-  './demo.js?v=20261115-sync-r21-v1',
-  './vendor/alpine.min.js?v=20261115-sync-r21-v1',
+  './cloud-bootstrap.js?v=20261115-sync-r21-v2',
+  './cloud.css?v=20261115-sync-r21-v2',
+  './styles.css?v=20261115-sync-r21-v2',
+  './mobile.css?v=20261115-sync-r21-v2',
+  './storage.js?v=20261115-sync-r21-v2',
+  './app.js?v=20261115-sync-r21-v2',
+  './pwa.js?v=20261115-sync-r21-v2',
+  './demo.js?v=20261115-sync-r21-v2',
+  './vendor/alpine.min.js?v=20261115-sync-r21-v2',
   './manifest.webmanifest',
   './icons/icon.svg',
   './icons/icon-192.png',

@@ -2,7 +2,7 @@
   'use strict';
 
   const status = {
-    version: '20261115-sync-r21-v1',
+    version: '20261115-sync-r21-v2',
     supported: 'serviceWorker' in navigator,
     secure: window.isSecureContext === true,
     registered: false,
